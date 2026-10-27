@@ -1,0 +1,15 @@
+{
+  "name": "ai-skills",
+  "description": "Local marketplace for the ai-skills plugin (consolidated custom skills).",
+  "owner": {
+    "name": "Asus"
+  },
+  "plugins": [
+    {
+      "name": "ai-skills",
+      "description": "Consolidated custom Claude Code skills for this user: bpmn-diagram (prompt-driven BPMN 2.0 generation/editing) today, more to follow.",
+      "version": "0.1.0",
+      "source": "./"
+    }
+  ]
+}

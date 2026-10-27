@@ -1,0 +1,59 @@
+<title>{{TITLE}}</title>
+<style>
+  :root { --bg: #f7f7f5; --panel: #ffffff; --border: #e3e1dc; --text: #1f1d1a; --muted: #6b6860; --accent: #b45309; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #1c1b19; --panel: #26241f; --border: #3a3732; --text: #efece6; --muted: #a39d8f; --accent: #e3a449; }
+  }
+  :root[data-theme="dark"] { --bg: #1c1b19; --panel: #26241f; --border: #3a3732; --text: #efece6; --muted: #a39d8f; --accent: #e3a449; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.4 -apple-system, "Segoe UI", sans-serif; }
+  #topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--panel); }
+  #topbar h1 { font-size: 14px; font-weight: 600; margin: 0; }
+  #summary { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  #canvas { position: absolute; top: 56px; left: 0; right: 0; bottom: 0; }
+  #status { position: absolute; top: 60px; left: 16px; font: 12px monospace; color: var(--muted); z-index: 5; }
+  .djs-container svg { background: var(--bg) !important; }
+  #zoom-controls { position: absolute; top: 64px; right: 16px; display: flex; flex-direction: column; gap: 4px; z-index: 5; }
+  #zoom-controls button { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 6px; cursor: pointer; font-size: 15px; }
+  #zoom-controls button:hover { border-color: var(--accent); }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bpmn-js@18/dist/assets/bpmn-js.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bpmn-js@18/dist/assets/diagram-js.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bpmn-js@18/dist/assets/bpmn-font/css/bpmn.css" />
+
+<div id="topbar">
+  <div>
+    <h1>{{TITLE}}</h1>
+    <div id="summary">{{SUMMARY}}</div>
+  </div>
+</div>
+<div id="status">Diagramma yuklanmoqda...</div>
+<div id="canvas"></div>
+<div id="zoom-controls">
+  <button id="zoom-in">+</button>
+  <button id="zoom-out">−</button>
+  <button id="zoom-fit">⤢</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bpmn-js@18/dist/bpmn-viewer.development.js"></script>
+<script>
+  const xml = {{BPMN_XML_JSON}};
+  const viewer = new BpmnJS({ container: "#canvas" });
+  const statusEl = document.getElementById("status");
+
+  viewer
+    .importXML(xml)
+    .then(({ warnings }) => {
+      statusEl.style.display = "none";
+      viewer.get("canvas").zoom("fit-viewport");
+      if (warnings?.length) console.warn("BPMN import warnings:", warnings);
+    })
+    .catch((err) => {
+      statusEl.textContent = "Xatolik: " + err.message;
+      statusEl.style.color = "#c0392b";
+      console.error("BPMN import failed:", err);
+    });
+
+  document.getElementById("zoom-in").onclick = () => viewer.get("zoomScroll").stepZoom(1);
+  document.getElementById("zoom-out").onclick = () => viewer.get("zoomScroll").stepZoom(-1);
+  document.getElementById("zoom-fit").onclick = () => viewer.get("canvas").zoom("fit-viewport");
+</script>
