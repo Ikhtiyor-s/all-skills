@@ -15,6 +15,7 @@ Batafsil tushuntirish pastdagi bo'limlarda.
 | `accessibility-testing` | Qulaylik (accessibility) tekshiruvi | Custom skill |
 | `visual-regression-testing` | Vizual regressiya testi (skrinshot solishtirish) | Custom skill |
 | `i18n-translate` | Tarjima / ko'p tillilik (i18n) | Custom skill |
+| `openapi-from-codebase` | Kod bazasidan Swagger/OpenAPI hujjat yaratish | Custom skill |
 | `db-migration-reviewer` | DB migratsiya xavfsizligini tekshiruvchi | Agent (POS'dan) |
 | `i18n-auditor` | Tarjima kamchiliklarini (yo'q kalit) topuvchi | Agent (POS'dan) |
 | `pos-quality-auditor` | POS sifat auditori ("bozorga tayyormi") | Agent (POS'dan) |
@@ -94,6 +95,19 @@ interpolation placeholders, ICU plural syntax, and each locale's existing
 register. Also handles adding a brand-new locale from scratch. Complements
 (doesn't replace) POS's `i18n-auditor` agent below — that one catches a
 different bug (code references a key no locale file has at all).
+
+### `skills/openapi-from-codebase` — Kod bazasidan Swagger/OpenAPI
+
+Generates an OpenAPI 3.0 spec by reading existing Express/Next.js route
+handlers — no prior spec or Postman collection needed (confirmed by reading
+Postman's own `api-documentation` skill: it assumes a spec/collection
+already exists, it doesn't extract one from raw route code). Explicitly
+skips stacks that already auto-generate this (FastAPI's `/openapi.json`,
+NestJS with `@nestjs/swagger`) — points the user at the existing output
+instead of duplicating it. `scripts/validate.mjs` (`@apidevtools/swagger-parser`)
+checks the written spec is actually valid OpenAPI before reporting done —
+verified against a hand-built valid spec (2 paths/3 operations/2 schemas,
+correctly counted) and a deliberately broken `$ref` (correctly rejected).
 
 ## Agents copied in from other projects
 

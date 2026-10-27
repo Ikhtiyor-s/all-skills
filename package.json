@@ -7,6 +7,8 @@
   "dependencies": {
     "elkjs": "^0.12.0",
     "pixelmatch": "^6.0.0",
-    "pngjs": "^7.0.0"
+    "pngjs": "^7.0.0",
+    "@apidevtools/swagger-parser": "^10.1.0",
+    "js-yaml": "^4.1.0"
   }
 }
