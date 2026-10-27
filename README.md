@@ -24,6 +24,7 @@ Batafsil tushuntirish pastdagi bo'limlarda.
 | `insecure-defaults` | Xavfli standart sozlamalarni aniqlovchi | Plugin (Trail of Bits) |
 | `differential-review` | Diff-asosida xavfsizlik ko'rib chiqish | Plugin (Trail of Bits) |
 | `supply-chain-risk-auditor` | Bog'liqlik (dependency) xavf auditi | Plugin (Trail of Bits) |
+| `open-sourcing` | Repo'ni PUBLIC qilishdan oldin sirlar(parol/token)ni tekshirish | Plugin (Trail of Bits) |
 | `superpowers` | Reja tuzish va tizimli debugging | Plugin |
 | `playwright` | Brauzerda avtomatik test | Plugin |
 | `github` | GitHub integratsiyasi | Plugin |
@@ -132,6 +133,13 @@ every project, not just this one).
   present before this round
 - `supply-chain-risk-auditor` — npm/PyPI/Go dependency risk, added for the
   heavy npm+pip usage across this user's projects
+- `open-sourcing` — secrets-history hygiene + license/docs/CI readiness
+  before a repo goes public. Added 2026-10-27 right after a real lesson:
+  this repo's own git history briefly carried a plaintext seeded admin
+  password (copied from POS's `pos-quality-auditor.md`) even after the
+  *working tree* was redacted — only a history rewrite + force-push
+  actually removed it. Run this BEFORE pushing anything new-public, not
+  just a grep of current file contents.
 
 **Dev workflow / testing:**
 - `superpowers` — planning, TDD, systematic debugging, subagent-driven dev
