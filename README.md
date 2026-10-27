@@ -16,6 +16,7 @@ Batafsil tushuntirish pastdagi bo'limlarda.
 | `visual-regression-testing` | Vizual regressiya testi (skrinshot solishtirish) | Custom skill |
 | `i18n-translate` | Tarjima / ko'p tillilik (i18n) | Custom skill |
 | `openapi-from-codebase` | Kod bazasidan Swagger/OpenAPI hujjat yaratish | Custom skill |
+| `repo-hygiene-audit` | Takror kod + ortiqcha/shov-shuvli commit'larni topuvchi | Custom skill |
 | `db-migration-reviewer` | DB migratsiya xavfsizligini tekshiruvchi | Agent (POS'dan) |
 | `i18n-auditor` | Tarjima kamchiliklarini (yo'q kalit) topuvchi | Agent (POS'dan) |
 | `pos-quality-auditor` | POS sifat auditori ("bozorga tayyormi") | Agent (POS'dan) |
@@ -108,6 +109,20 @@ instead of duplicating it. `scripts/validate.mjs` (`@apidevtools/swagger-parser`
 checks the written spec is actually valid OpenAPI before reporting done —
 verified against a hand-built valid spec (2 paths/3 operations/2 schemas,
 correctly counted) and a deliberately broken `$ref` (correctly rejected).
+
+### `skills/repo-hygiene-audit` — Takror kod va commit shovqinini topish
+
+Two zero-dependency scripts: `find-duplicates.mjs` (sliding-window line-hash
+clone detection — jscpd/PMD CPD technique, verified against a fixture: found
+exactly the one deliberate duplication, ignored unrelated code) and
+`commit-noise.mjs` (flags low-information commit messages and runs of small
+commits on overlapping files within a short time window — verified against
+a synthetic noisy history: correctly flagged a 4-commit/6-minute run and the
+3 generic-message commits in it, correctly left an unrelated later commit
+alone). Built directly from the user's own observation that commits were
+getting too granular and code too repeated across sessions — see
+[[feedback_commit_and_duplication_discipline]] for the behavioral half of
+the fix (this skill only audits after the fact).
 
 ## Agents copied in from other projects
 
