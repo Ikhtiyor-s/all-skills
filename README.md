@@ -1,8 +1,9 @@
 # ai-skills
 
-Consolidated catalog of this user's custom Claude Code skills, plus a running
-list of the ready-made marketplace plugins installed alongside them so
-everything AI-skill-related lives in one place.
+Ushbu foydalanuvchining custom Claude Code skill'larini bitta joyga
+jamlovchi katalog, shu bilan birga o'rnatilgan tayyor marketplace
+plugin'larining ham ro'yxati — hammasi AI-skill bilan bog'liq narsalar bir
+joyda bo'lishi uchun.
 
 ## Tezkor indeks (o'zbekcha)
 
@@ -50,195 +51,218 @@ Batafsil tushuntirish pastdagi bo'limlarda.
 | `postman` | API test/mock/monitoring | Plugin (oldindan bor) |
 | `figma` MCP | Figma dizaynini kodga aylantirish | MCP server (ulangan) |
 
-## Custom skills in this repo
+## Bu repodagi custom skill'lar
 
 ### `skills/bpmn-diagram` — BPMN diagramma
 
-Prompt-driven BPMN 2.0 diagram generation and iterative editing — describe a
-business process in Uzbek, Russian, or English and get a live, interactive
-diagram plus a standards-compliant `.bpmn` file, with no AI API call (Claude
-reasons directly in the same `ProcessSpec`/edit-operation vocabulary that
-`bpmn-studio`'s own production AI pipeline uses). See
-`skills/bpmn-diagram/SKILL.md` for the full mechanics.
+Prompt orqali BPMN 2.0 diagramma yaratish va bosqichma-bosqich tahrirlash —
+biznes-jarayonni o'zbek, rus yoki ingliz tilida tasvirlab bering, va javobga
+jonli, interaktiv diagramma + standartga mos `.bpmn` fayl olasiz, hech
+qanday AI API chaqiruvisiz (Claude bevosita `bpmn-studio`'ning o'zining
+production AI pipeline'i ishlatadigan xuddi shu `ProcessSpec`/tahrirlash-
+amal vokabulyarida fikr yuritadi). To'liq mexanika uchun
+`skills/bpmn-diagram/SKILL.md`ga qarang.
 
-Ported/vendored from `D:\Docker\projects\bpmn-studio\src\lib\ai\` (pure,
-zero-DOM modules only — `process-spec.ts`, `validator.ts`, `lint.ts`,
-`layout.ts`): `process-spec.mjs`, `validator.mjs`, `lint.mjs`, `layout.mjs`.
-New in this repo (bpmn-studio has no headless equivalent — it round-trips
-through a live bpmn-js Modeler instead): `apply.mjs` (pure ProcessSpec
-reducer) and `serialize-xml.mjs` (ProcessSpec + layout → BPMN 2.0 XML).
-Verified against `bpmn-moddle`'s real schema parser with zero warnings on
-both a flat process and a multi-pool/lane/boundary-event/data-object
-topology.
+`D:\Docker\projects\bpmn-studio\src\lib\ai\`dan ko'chirilgan (faqat sof,
+DOM'ga bog'liq bo'lmagan modullar — `process-spec.ts`, `validator.ts`,
+`lint.ts`, `layout.ts`): `process-spec.mjs`, `validator.mjs`, `lint.mjs`,
+`layout.mjs`. Bu repoda yangi (bpmn-studio'da bunga teng narsa yo'q — u
+jonli bpmn-js Modeler orqali ishlaydi): `apply.mjs` (sof ProcessSpec
+reducer) va `serialize-xml.mjs` (ProcessSpec + layout → BPMN 2.0 XML).
+`bpmn-moddle`ning haqiqiy sxema parseri orqali tekshirilgan — ham oddiy
+jarayon, ham ko'p-pool/lane/boundary-event/data-object topologiyasida nol
+xatolik bilan.
 
 ### `skills/accessibility-testing` — Qulaylik tekshiruvi
 
-Audits a live page's accessibility-tree structure (missing labels, broken
-heading order, unreachable interactive elements, landmark issues) via
-`claude-in-chrome`'s `read_page` — no new install. Explicitly scoped: tree
-structure only, not a WCAG-certified ruleset (no color-contrast computation —
-pair with axe-core/Lighthouse for a compliance-grade audit).
+Jonli sahifaning accessibility-tree strukturasini (yo'qolgan label'lar,
+buzilgan sarlavha tartibi, yetib bo'lmaydigan interaktiv elementlar,
+landmark muammolari) `claude-in-chrome`ning `read_page` vositasi orqali
+auditlaydi — yangi o'rnatish shart emas. Doirasi aniq belgilangan: faqat
+daraxt strukturasi, WCAG-sertifikatlangan qoidalar to'plami emas (rang-
+kontrast hisoblanmaydi — compliance-darajadagi audit uchun axe-core/
+Lighthouse bilan birga ishlatilsin).
 
 ### `skills/visual-regression-testing` — Vizual regressiya testi
 
-Screenshots a page at fixed viewports (via `claude-in-chrome`) and
-pixel-diffs against a stored baseline (`scripts/diff.mjs`, pixelmatch — pure
-image diff, verified against hand-built test fixtures: 0% diff for
-identical images, exact pixel count for a deliberately changed region).
+Sahifani belgilangan viewport'larda (`claude-in-chrome` orqali) skrinshot
+qiladi va saqlangan baseline bilan piksel-solishtiradi (`scripts/diff.mjs`,
+pixelmatch — sof rasm-solishtirish, qo'lda tuzilgan test fixture'lari bilan
+tekshirilgan: bir xil rasmlar uchun 0% farq, ataylab o'zgartirilgan hudud
+uchun aniq piksel soni).
 
 ### `skills/i18n-translate` — Tarjima / ko'p tillilik
 
-Finds missing/empty keys across a project's locale files (JSON or Flutter
-`.arb`, `scripts/diff-locales.mjs` — verified against a deliberately
-incomplete fixture: correctly caught 2 missing + 1 empty key) and Claude
-translates them directly (no external translation API), preserving
-interpolation placeholders, ICU plural syntax, and each locale's existing
-register. Also handles adding a brand-new locale from scratch. Complements
-(doesn't replace) POS's `i18n-auditor` agent below — that one catches a
-different bug (code references a key no locale file has at all).
+Loyihaning locale fayllari bo'ylab (JSON yoki Flutter `.arb`) yo'q/bo'sh
+kalitlarni topadi (`scripts/diff-locales.mjs` — ataylab to'liqsiz fixture
+bilan tekshirilgan: 2 yo'q + 1 bo'sh kalitni to'g'ri topdi) va Claude
+ularni bevosita tarjima qiladi (tashqi tarjima API'siz), interpolyatsiya
+placeholder'larini, ICU plural sintaksisini va har bir locale'ning mavjud
+uslubini saqlab qolgan holda. Yangi locale'ni noldan yaratishni ham
+bajaradi. Pastdagi POS'ning `i18n-auditor` agentini **almashtirmaydi**,
+balki **to'ldiradi** — u boshqa xatoni topadi (kod ishlatgan, lekin hech
+qaysi locale faylida yo'q kalit).
 
 ### `skills/openapi-from-codebase` — Kod bazasidan Swagger/OpenAPI
 
-Generates an OpenAPI 3.0 spec by reading existing Express/Next.js route
-handlers — no prior spec or Postman collection needed (confirmed by reading
-Postman's own `api-documentation` skill: it assumes a spec/collection
-already exists, it doesn't extract one from raw route code). Explicitly
-skips stacks that already auto-generate this (FastAPI's `/openapi.json`,
-NestJS with `@nestjs/swagger`) — points the user at the existing output
-instead of duplicating it. `scripts/validate.mjs` (`@apidevtools/swagger-parser`)
-checks the written spec is actually valid OpenAPI before reporting done —
-verified against a hand-built valid spec (2 paths/3 operations/2 schemas,
-correctly counted) and a deliberately broken `$ref` (correctly rejected).
+Mavjud Express/Next.js route handler'larini o'qib OpenAPI 3.0 spec yaratadi
+— oldindan spec yoki Postman collection shart emas (Postman'ning o'z
+`api-documentation` skill'ini o'qib tasdiqlandi: u spec/collection
+allaqachon mavjud deb hisoblaydi, xom route kodidan hech narsani
+chiqarmaydi). Buni avtomatik generatsiya qiladigan steklarni (FastAPI'ning
+`/openapi.json`, `@nestjs/swagger`li NestJS) ataylab o'tkazib yuboradi —
+foydalanuvchini takrorlash o'rniga mavjud natijaga yo'naltiradi.
+`scripts/validate.mjs` (`@apidevtools/swagger-parser`) yozilgan spec
+haqiqatan to'g'ri OpenAPI ekanini "tayyor" deb aytishdan oldin tekshiradi —
+qo'lda tuzilgan to'g'ri spec (2 path/3 operatsiya/2 sxema, to'g'ri
+sanalgan) va ataylab buzilgan `$ref` (to'g'ri rad etilgan) bilan
+tekshirilgan.
 
 ### `skills/repo-hygiene-audit` — Takror kod va commit shovqinini topish
 
-Two zero-dependency scripts: `find-duplicates.mjs` (sliding-window line-hash
-clone detection — jscpd/PMD CPD technique, verified against a fixture: found
-exactly the one deliberate duplication, ignored unrelated code) and
-`commit-noise.mjs` (flags low-information commit messages and runs of small
-commits on overlapping files within a short time window — verified against
-a synthetic noisy history: correctly flagged a 4-commit/6-minute run and the
-3 generic-message commits in it, correctly left an unrelated later commit
-alone). Built directly from the user's own observation that commits were
-getting too granular and code too repeated across sessions — see
-[[feedback_commit_and_duplication_discipline]] for the behavioral half of
-the fix (this skill only audits after the fact).
+Ikkita tashqi bog'liqliksiz skript: `find-duplicates.mjs` (sliding-window
+qator-hash klon aniqlash — jscpd/PMD CPD texnikasi, fixture bilan
+tekshirilgan: ataylab qo'yilgan bitta takrorni aniq topdi, bog'liqsiz
+kodni e'tiborsiz qoldirdi) va `commit-noise.mjs` (ma'nosiz commit
+xabarlarini va qisqa vaqt oralig'ida bir-biriga mos fayllarga tegishli
+kichik commit'lar ketma-ketligini topadi — sun'iy "shovqinli" tarix bilan
+tekshirilgan: 4-commit/6-daqiqalik ketma-ketlikni va undagi 3 ta umumiy
+xabarli commit'ni to'g'ri topdi, bog'liqsiz keyingi commit'ni to'g'ri
+tegmay qoldirdi). Foydalanuvchining o'z kuzatuvi asosida qurildi — commit'lar
+juda mayda bo'lib ketayotgani va kod sessiyalar bo'ylab ko'p takrorlanayotgani
+haqida — tuzatishning xulq-atvor yarmisi uchun
+[[feedback_commit_and_duplication_discipline]]ga qarang (bu skill faqat
+keyinchalik auditlaydi).
 
-## Agents copied in from other projects
+## Boshqa loyihalardan ko'chirilgan agentlar
 
-### `agents/` (5 files, copied verbatim from `D:\Docker\projects\pos\.claude\agents\`, 2026-10-26)
+### `agents/` (5 fayl, `D:\Docker\projects\pos\.claude\agents\`dan so'zma-so'z ko'chirilgan, 2026-10-26)
 
 `db-migration-reviewer.md`, `i18n-auditor.md`, `pos-quality-auditor.md`,
-`poster-integration-dev.md`, `poster-parity-orchestrator.md` — Biznes POS's
-own specialist subagents (Prisma migration safety review, i18n leak
-detection, production-readiness audit, Poster POS integration, and the
-Poster-parity delivery orchestrator). Copied, not moved — POS's own
-`.claude/agents/` is untouched and still authoritative; **if POS's copies
-change, re-copy them here, this repo doesn't auto-sync**.
+`poster-integration-dev.md`, `poster-parity-orchestrator.md` — Biznes
+POS'ning o'zining maxsus subagentlari (Prisma migratsiya xavfsizligini
+ko'rib chiqish, i18n sizish aniqlash, ishlab chiqarishga tayyorlik auditi,
+Poster POS integratsiyasi, va Poster-parity yetkazib berish
+orkestratori). Ko'chirildi, ko'chirilmadi (move emas) — POS'ning o'z
+`.claude/agents/`i tegilmagan va hali ham asosiy manba hisoblanadi; **agar
+POS'ning nusxalari o'zgarsa, bu yerga qayta ko'chirish kerak, bu repo
+avtomatik sinxronlanmaydi**.
 
-One credential was redacted from `pos-quality-auditor.md` (a seeded local
-admin password) before this repo went public — see git history if the
-original is ever needed; it still lives, unredacted, in POS's own private
-copy.
+`pos-quality-auditor.md`dan bitta credential (urug'langan lokal admin
+paroli) bu repo public bo'lishidan oldin yashirildi — agar asl nusxa kerak
+bo'lsa, git tarixiga qarang; u hali ham, yashirilmagan holda, POS'ning
+o'zining shaxsiy nusxasida bor.
 
-Deliberately **not** copied: POS's other 6 agents (`architect`,
-`backend-dev`, `cto`, `frontend-dev`, `pm`, `qa-reviewer`) — those are
-POS-customized versions of agents that already exist globally at
-`~/.claude/agents/`. Copying them here (user scope, same as `~/.claude/agents/`)
-would create two competing global definitions of the same agent name and
-could leak POS-specific assumptions into every other project's generic
-architect/pm/etc. work. The 5 agents copied here have POS-specific names
-with no such collision, so they just sit inert everywhere except when
-someone deliberately invokes them (e.g. for actual Poster integration work).
+Ataylab **ko'chirilmagan**: POS'ning qolgan 6 ta agenti (`architect`,
+`backend-dev`, `cto`, `frontend-dev`, `pm`, `qa-reviewer`) — bular
+`~/.claude/agents/`da allaqachon global mavjud bo'lgan agentlarning POS
+uchun moslashtirilgan versiyalari. Ularni bu yerga (user scope, xuddi
+`~/.claude/agents/` kabi) ko'chirish bir xil agent nomining ikkita raqobat
+qiluvchi global ta'rifini yaratgan bo'lardi va POS'ga xos taxminlarni
+boshqa har qanday loyihaning umumiy architect/pm va h.k. ishiga sizdirishi
+mumkin edi. Bu yerga ko'chirilgan 5 ta agentning POS'ga xos nomlari bor,
+shunday to'qnashuv yo'q, shuning uchun ular hamma joyda — kimdir ularni
+ataylab chaqirmaguncha (masalan, haqiqiy Poster integratsiyasi ishi uchun)
+— shunchaki befarq turadi.
 
-## Marketplace plugins installed alongside this project (2026-10-26/27)
+## Shu loyiha bilan birga o'rnatilgan marketplace plugin'lari (2026-10-26/27)
 
-These are off-the-shelf plugins, not built here — installed via
-`claude plugin install <name>@<marketplace>`, scope `user` (available in
-every project, not just this one).
+Bular tayyor plugin'lar, bu yerda qurilmagan — `claude plugin install
+<nom>@<marketplace>` orqali o'rnatilgan, `user` doirasida (faqat shu emas,
+har qanday loyihada mavjud).
 
-**Security audit (Trail of Bits):**
-- `static-analysis`, `insecure-defaults`, `differential-review` — already
-  present before this round
-- `supply-chain-risk-auditor` — npm/PyPI/Go dependency risk, added for the
-  heavy npm+pip usage across this user's projects
-- `open-sourcing` — secrets-history hygiene + license/docs/CI readiness
-  before a repo goes public. Added 2026-10-27 right after a real lesson:
-  this repo's own git history briefly carried a plaintext seeded admin
-  password (copied from POS's `pos-quality-auditor.md`) even after the
-  *working tree* was redacted — only a history rewrite + force-push
-  actually removed it. Run this BEFORE pushing anything new-public, not
-  just a grep of current file contents.
+**Xavfsizlik auditi (Trail of Bits):**
+- `static-analysis`, `insecure-defaults`, `differential-review` — bu
+  bosqichdan oldin allaqachon mavjud edi
+- `supply-chain-risk-auditor` — npm/PyPI/Go bog'liqlik xavfi, bu
+  foydalanuvchining loyihalarida npm+pip ko'p ishlatilgani uchun qo'shildi
+- `open-sourcing` — repo public bo'lishidan oldin sirlar-tarixi gigienasi +
+  litsenziya/docs/CI tayyorligi. 2026-10-27'da, haqiqiy saboqdan keyin
+  qo'shildi: bu repo'ning o'z git tarixida qisqa vaqt POS'ning
+  `pos-quality-auditor.md`sidan ko'chirilgan oddiy matnli urug'langan admin
+  paroli bor edi, *working tree* yashirilgandan keyin ham — faqat tarixni
+  qayta yozish + force-push buni haqiqatan olib tashladi. Buni har qanday
+  yangi-public push'dan OLDIN ishga tushiring, nafaqat joriy fayl
+  mazmunini grep qilish.
 
-**Dev workflow / testing:**
-- `superpowers` — planning, TDD, systematic debugging, subagent-driven dev
-- `playwright` — Microsoft's browser automation / E2E testing MCP
-- `github` — official GitHub MCP. Auth is header-based, not OAuth login: set
-  `GITHUB_PERSONAL_ACCESS_TOKEN` in `~/.claude/settings.json`'s `env` block
-  (a GitHub PAT from https://github.com/settings/tokens), then restart
-  Claude Code. `claude mcp login` does not apply to this server.
+**Ish jarayoni / test:**
+- `superpowers` — reja tuzish, TDD, tizimli debugging, subagent-asosida
+  ishlab chiqish
+- `playwright` — Microsoft'ning brauzer avtomatlashtirish / E2E test MCP'i
+- `github` — rasmiy GitHub MCP. Autentifikatsiya header-asosida, OAuth
+  login emas: `GITHUB_PERSONAL_ACCESS_TOKEN`ni `~/.claude/settings.json`ning
+  `env` blokida o'rnating (https://github.com/settings/tokens'dan GitHub
+  PAT), keyin Claude Code'ni qayta ishga tushiring. `claude mcp login` bu
+  serverga tegishli emas.
 
 **AI workflow:**
-- `agent-sdk-dev` — Claude Agent SDK dev kit
-- `pydantic-ai` — Python AI agent framework patterns
-- `mcp-server-dev` — designing/building MCP servers
-- `langfuse` — LLM tracing/prompt-management/evaluation
-- `mlflow` — ⚠️ installed but **fails to load** (upstream packaging bug:
-  duplicate `hooks/hooks.json` declaration in v1.0.0 — not fixable locally;
-  reported upstream). Reinstall later once a fixed version ships.
+- `agent-sdk-dev` — Claude Agent SDK qurish vositasi
+- `pydantic-ai` — Python AI agent freymvork patternlari
+- `mcp-server-dev` — MCP server loyihalash/qurish
+- `langfuse` — LLM kuzatuvi/prompt-boshqaruv/baholash
+- `mlflow` — ⚠️ o'rnatilgan, lekin **yuklanmayapti** (upstream paketlash
+  bugi: v1.0.0'da ikki marta `hooks/hooks.json` deklaratsiyasi — lokal
+  tuzatib bo'lmaydi, upstream'ga xabar berilgan). Tuzatilgan versiya
+  chiqqach qayta o'rnating.
 
-**Video / media production:**
-- `runway-api` — video generation (veo3, gen4.5, seedance2, Nano, Banana Pro)
-- `hyperframes` — HeyGen HTML-to-video compositions
-- `adobe-for-creativity` — image editing / creative workflows
+**Video / media ishlab chiqarish:**
+- `runway-api` — video generatsiya (veo3, gen4.5, seedance2, Nano, Banana
+  Pro)
+- `hyperframes` — HeyGen HTML'dan video kompozitsiyalari
+- `adobe-for-creativity` — rasm tahrirlash / kreativ ish jarayonlari
 
-**Database:**
-- `prisma` — matches POS's and bpmn-studio's actual ORM (both are Postgres
-  via Prisma); schema/migration/query help. Self-hosted/Fly Postgres has no
-  matching plugin otherwise — every other DB plugin in the marketplace is
-  locked to a specific managed cloud provider (Neon, Supabase, PlanetScale,
-  etc.) this user doesn't use; direct `psql`/`docker exec` access needs no
-  plugin at all.
+**Ma'lumotlar bazasi:**
+- `prisma` — POS va bpmn-studio'ning haqiqiy ORM'iga mos keladi (ikkisi
+  ham Prisma orqali Postgres); sxema/migratsiya/so'rov yordami. O'z-
+  joylashtirilgan/Fly Postgres uchun boshqa mos plugin yo'q — marketplace'
+  dagi har qanday boshqa DB plugin ma'lum bir boshqariladigan bulut
+  provayderiga (Neon, Supabase, PlanetScale va h.k.) bog'langan, bu
+  foydalanuvchi ulardan foydalanmaydi; to'g'ridan-to'g'ri `psql`/`docker
+  exec` kirish uchun plugin umuman kerak emas.
 
-**Observability / error monitoring:**
-- `sentry` — error reports, stack traces, issue search by fingerprint. Added
-  because multiple live deployments (pos.non-bor.uz, AyTiX Support, Maktab
-  Sinov, SmartVision, ...) had no error-monitoring visibility at all.
+**Kuzatuv / xato monitoring:**
+- `sentry` — xato hisobotlari, stack trace'lar, fingerprint bo'yicha
+  masala qidirish. Bir nechta jonli deploy'lar (pos.non-bor.uz, AyTiX
+  Support, Maktab Sinov, SmartVision, ...) hech qanday xato-monitoring
+  ko'rinishiga ega emasligi sababli qo'shildi.
 
-**Docs / code understanding:**
-- `context7` — version-accurate library docs pulled live into context
-  instead of relying on training-data-era API knowledge (works anonymously,
-  no setup).
-- `mintlify` — for turning any of this user's written docs (testing
-  qo'llanma, AI Kitob, API references) into a real hosted docs site.
-- `sourcegraph` — cross-repo code search/understanding; most useful once
-  "find X across all my projects" becomes a recurring need with 30+ repos.
+**Hujjatlar / kodni tushunish:**
+- `context7` — versiyaga mos kutubxona dokumentatsiyasi jonli ravishda
+  kontekstga tortib olinadi, o'qitish-ma'lumotlari davridagi API bilimiga
+  tayanish o'rniga (anonim ishlaydi, sozlash shart emas).
+- `mintlify` — bu foydalanuvchining yozgan har qanday hujjatini (testing
+  qo'llanma, AI Kitob, API ma'lumotnomalari) haqiqiy hosting qilingan
+  hujjat saytiga aylantirish uchun.
+- `sourcegraph` — ko'p-repo kod qidirish/tushunish; 30+ repo bilan "mening
+  barcha loyihalarim bo'ylab X'ni top" takrorlanadigan ehtiyojga aylangach
+  eng foydali bo'ladi.
 
-**Code quality / security (complements Trail of Bits):**
-- `semgrep` — real-time vulnerability scanning while code is being written
-  (Trail of Bits' plugins are more audit/analysis-oriented; semgrep is the
-  inline/live counterpart).
-- `sonarqube` — heavier, more opinionated quality+security gate (7000+
-  rules, PostToolUse hooks, secrets scanning) — needs a SonarQube
-  server/cloud account to get full value; installed as an available option,
-  not actively configured against any project yet.
+**Kod sifati / xavfsizlik (Trail of Bits'ni to'ldiradi):**
+- `semgrep` — kod yozilayotganda real vaqtda zaiflik skanerlash (Trail of
+  Bits'ning plugin'lari ko'proq audit/tahlil-yo'naltirilgan; semgrep
+  inline/jonli hamkasbi).
+- `sonarqube` — og'irroq, ko'proq o'ziga xos qarashli sifat+xavfsizlik
+  darvozasi (7000+ qoida, PostToolUse hook'lar, sirlarni skanerlash) —
+  to'liq qiymat uchun SonarQube server/bulut akkaunti kerak; mavjud variant
+  sifatida o'rnatilgan, hali hech qaysi loyihaga faol sozlanmagan.
 
-**Already installed before this project existed (for reference):**
-- `ui-ux-pro-max` — design system, palettes, UX guidelines, and presentation
-  slides (see "slayd" question — the `slides` skill inside this plugin, plus
-  the built-in Artifact "Slides" type, are both already available; no new
-  plugin was needed)
-- `impeccable` — visual design-quality critique/polish
-- `postman` — API design/mock/test/monitor, bound to this user's Postman
-  workspace
-- Figma MCP server — connected, design-to-code
+**Bu loyiha paydo bo'lishidan oldin allaqachon o'rnatilgan edi (ma'lumot uchun):**
+- `ui-ux-pro-max` — design system, palitra, UX qo'llanmalari, va taqdimot
+  slaydlari ("slayd" savoliga qarang — bu plugin ichidagi `slides` skill,
+  shuningdek built-in Artifact "Slides" turi, ikkisi ham allaqachon mavjud;
+  yangi plugin kerak bo'lmadi)
+- `impeccable` — vizual dizayn sifatini tanqid qilish/sayqallash
+- `postman` — API loyihalash/mock/test/monitor, bu foydalanuvchining
+  Postman workspace'iga bog'langan
+- Figma MCP server — ulangan, dizaynni kodga aylantirish
 
-## Adding another custom skill here
+## Bu yerga yangi custom skill qo'shish
 
-1. `mkdir skills/<name>` and write `skills/<name>/SKILL.md` (frontmatter:
-   `name`, `description` — what it does AND when to use it).
-2. Bundle any scripts under `skills/<name>/scripts/`.
-3. No separate registration needed — this repo is already linked into
-   Claude Code as a local plugin (`ai-skills@ai-skills`); every skill folder
-   under `skills/` is picked up automatically.
-4. Update the "Tezkor indeks" table above with the new item's o'zbekcha nomi.
+1. `mkdir skills/<nom>` va `skills/<nom>/SKILL.md` yozing (frontmatter:
+   `name`, `description` — nima qilishi VA qachon ishlatilishi).
+2. Har qanday skriptni `skills/<nom>/scripts/` ostiga joylashtiring.
+3. Alohida ro'yxatga olish shart emas — bu repo allaqachon Claude Code'ga
+   lokal plugin sifatida ulangan (`ai-skills@ai-skills`); `skills/` ostidagi
+   har bir skill papkasi avtomatik aniqlanadi.
+4. Yuqoridagi "Tezkor indeks" jadvaliga yangi elementning o'zbekcha nomini
+   qo'shing.
