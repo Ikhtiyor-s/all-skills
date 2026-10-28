@@ -18,7 +18,6 @@ Batafsil tushuntirish pastdagi bo'limlarda.
 | `i18n-translate` | Tarjima / ko'p tillilik (i18n) | Custom skill |
 | `openapi-from-codebase` | Kod bazasidan Swagger/OpenAPI hujjat yaratish | Custom skill |
 | `repo-hygiene-audit` | Takror kod + ortiqcha/shov-shuvli commit'larni topuvchi | Custom skill |
-| `social-media-manager` | Instagram/Telegram uchun post+javob+statistika (faqat rasmiy API) | Custom skill |
 | `db-migration-reviewer` | DB migratsiya xavfsizligini tekshiruvchi | Agent (POS'dan) |
 | `i18n-auditor` | Tarjima kamchiliklarini (yo'q kalit) topuvchi | Agent (POS'dan) |
 | `pos-quality-auditor` | POS sifat auditori ("bozorga tayyormi") | Agent (POS'dan) |
@@ -134,22 +133,6 @@ juda mayda bo'lib ketayotgani va kod sessiyalar bo'ylab ko'p takrorlanayotgani
 haqida — tuzatishning xulq-atvor yarmisi uchun
 [[feedback_commit_and_duplication_discipline]]ga qarang (bu skill faqat
 keyinchalik auditlaydi).
-
-### `skills/social-media-manager` — Instagram/Telegram boshqaruvi
-
-Instagram Business/Creator akkaunt (rasmiy Graph API) va Telegram bot
-(rasmiy Bot API) uchun persona-asosida post joylash, kommentariya/DM'ga
-javob qoralash (xavfsizlik chegaralari bilan), va statistika olish uchun
-building block'lar. **Faqat rasmiy, ToS-mos API'lar** — login-asosida yoki
-brauzer-avtomatlashtirish orqali oddiy shaxsiy akkauntni boshqarish ataylab
-qo'llab-quvvatlanmaydi (akkaunt bloklanish xavfi). Ikkala API klienti ham
-(`instagram-client.mjs`, `telegram-client.mjs`) `DRY_RUN=1` rejimida barcha
-buyruqlar bo'yicha tekshirilgan — to'g'ri endpoint/parametrlar, token
-yashiringan, kredensial yo'qligida aniq xato xabari. Profil validatori
-(`validate-profile.mjs`) `boundaries` (xavfsizlik chegaralari) maydoni
-yo'qligida ishlashdan bosh tortadi. **Rejalashtirish (cron) va doimiy
-ishlaydigan xizmat qismi ataylab bu yerda emas** — foydalanuvchi buni
-alohida loyihada quradi, bu skill shunga chaqiriladigan building block'lar.
 
 ## Boshqa loyihalardan ko'chirilgan agentlar
 
